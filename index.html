@@ -85,7 +85,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>👁Kasmonys</h2>
+        <h2 className="text-xl font-bold">👁️Kasmonys</h2>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" placeholder="Ingrese su nombre">
         <label for="monto">Monto prestado:</label>
@@ -127,7 +127,7 @@
             }
             tablaOpciones += `</table>`;
             document.getElementById('pagare').innerHTML = `
-                <h2>👁Kasmonys</h2>
+                <h2 className="text-xl font-bold">👁️Kasmonys</h2>
                 <h3>Pagaré #${numeroPagare}</h3>
                 <p><strong>Fecha de emisión:</strong> ${formatDate(fechaActual)}</p>
                 <p>Yo, <b>${nombre}</b>, me comprometo a pagar 12 abonos quincenales de <b>${formatCurrency(pagoFijo)}</b>, con un total a pagar de <b>${formatCurrency(totalPagar)}</b>, a Efrain Sanchez Hernandez (Kasmonys).</p>
