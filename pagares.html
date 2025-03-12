@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Pagaré</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4edda;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo {
+            max-width: 100px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #218838;
+        }
+        label, input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .pagare {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f8f9fa;
+            display: none;
+        }
+        .firma {
+            margin-top: 30px;
+            height: 50px;
+            border-bottom: 2px solid black;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background: #218838;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>👁Kasmonys</h2>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" placeholder="Ingrese su nombre">
+        <label for="monto">Monto prestado:</label>
+        <input type="number" id="monto" placeholder="Ingrese el monto">
+        <button onclick="generarPagare()">Generar Opciones de Pago</button>
+        <div class="pagare" id="pagare"></div>
+    </div>
+    <script>
+        function formatCurrency(value) {
+            return value.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        }
+
+        function formatDate(date) {
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('es-MX', options);
+        }
+
+        function generarPagare() {
+            let nombre = document.getElementById('nombre').value;
+            let monto = parseFloat(document.getElementById('monto').value);
+            if (!nombre || isNaN(monto) || monto <= 0) {
+                alert("Ingrese valores válidos.");
+                return;
+            }
+            let fechaActual = new Date();
+            let fechaPrimerPago = new Date();
+            fechaPrimerPago.setDate(fechaActual.getDate() + 15);
+            let numeroPagare = Math.floor(100000 + Math.random() * 900000);
+            let interes = 0.095;
+            let plazo = 12;
+            let pagoFijo = (monto * interes) / (1 - Math.pow(1 + interes, -plazo));
+            let totalPagar = pagoFijo * plazo;
+            let tablaOpciones = `<table><tr><th>Plazo (quincenas)</th><th>Pago quincenal</th><th>Total a pagar</th></tr>`;
+            
+            for (let p = 2; p <= 12; p++) {
+                let pago = (monto * interes) / (1 - Math.pow(1 + interes, -p));
+                let total = pago * p;
+                tablaOpciones += `<tr><td>${p}</td><td>${formatCurrency(pago)}</td><td>${formatCurrency(total)}</td></tr>`;
+            }
+            tablaOpciones += `</table>`;
+            document.getElementById('pagare').innerHTML = `
+                <h2>👁Kasmonys</h2>
+                <h3>Pagaré #${numeroPagare}</h3>
+                <p><strong>Fecha de emisión:</strong> ${formatDate(fechaActual)}</p>
+                <p>Yo, <b>${nombre}</b>, me comprometo a pagar 12 abonos quincenales de <b>${formatCurrency(pagoFijo)}</b>, con un total a pagar de <b>${formatCurrency(totalPagar)}</b>, a Efrain Sanchez Hernandez (Kasmonys).</p>
+                <p>Dicha cantidad será pagada en cualquiera de las siguientes cuentas:</p>
+                <p><strong>Bancomer 012 0270 1563 9908 377</strong></p>
+                <p><strong>Banamex 002 2727 0137 3483 395</strong></p>
+                <p><strong>Coppel 137 2611 0036 1404 164</strong></p> 
+                <p><strong>Primer pago:</strong> ${formatDate(fechaPrimerPago)}</p>
+                <p>Ahorre pagando quincenalmente el plazo que prefiera:</p>
+                ${tablaOpciones}
+                <p>El incumplimiento de cualquiera de estos pagos causará un interés moratorio.</p>
+                <div class="firma">Firma</div>
+                <p>¡Kasmonys Financiamos tus sueños!</p>
+            `;
+            document.getElementById('pagare').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
