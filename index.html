@@ -85,7 +85,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 className="text-xl font-bold">👁️Kasmonys</h2>
+        <h2>👁️Kasmonys</h2>
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" placeholder="Ingrese su nombre">
         <label for="monto">Monto prestado:</label>
@@ -118,24 +118,27 @@
             let plazo = 12;
             let pagoFijo = (monto * interes) / (1 - Math.pow(1 + interes, -plazo));
             let totalPagar = pagoFijo * plazo;
-            let tablaOpciones = `<table><tr><th>Plazo (quincenas)</th><th>Pago quincenal</th><th>Total a pagar</th></tr>`;
+            let pagoUnico = monto * 1.15; // Suma del 15%
             
+            let tablaOpciones = `<table><tr><th>Plazo (quincenas)</th><th>Pago quincenal</th><th>Total a pagar</th></tr>`;
             for (let p = 2; p <= 12; p++) {
                 let pago = (monto * interes) / (1 - Math.pow(1 + interes, -p));
                 let total = pago * p;
                 tablaOpciones += `<tr><td>${p}</td><td>${formatCurrency(pago)}</td><td>${formatCurrency(total)}</td></tr>`;
             }
             tablaOpciones += `</table>`;
+            
             document.getElementById('pagare').innerHTML = `
-                <h2 className="text-xl font-bold">👁️Kasmonys</h2>
+                <h2>👁️Kasmonys</h2>
                 <h3>Pagaré #${numeroPagare}</h3>
                 <p><strong>Fecha de emisión:</strong> ${formatDate(fechaActual)}</p>
-                <p>Yo, <b>${nombre}</b>, me comprometo a pagar 12 abonos quincenales de <b>${formatCurrency(pagoFijo)}</b>, con un total a pagar de <b>${formatCurrency(totalPagar)}</b>, a Efrain Sanchez Hernandez (Kasmonys).</p>
+                <p>Yo, <b>${nombre}</b>,he recibido un préstamo de <b>${formatCurrency(monto)}</b>,y me comprometo a pagar 12 abonos quincenales de <b>${formatCurrency(pagoFijo)}</b>, con un total a pagar de <b>${formatCurrency(totalPagar)}</b>, a Efrain Sanchez Hernandez (Kasmonys).</p>
+                <p>También tengo la opción de liquidar en un solo pago de <b>${formatCurrency(pagoUnico)}</b> antes de la fecha del primer pago.</p>
+                <p><strong>Primer pago:</strong> ${formatDate(fechaPrimerPago)}</p>
                 <p>Dicha cantidad será pagada en cualquiera de las siguientes cuentas:</p>
                 <p><strong>Bancomer 012 0270 1563 9908 377</strong></p>
                 <p><strong>Banamex 002 2727 0137 3483 395</strong></p>
                 <p><strong>Coppel 137 2611 0036 1404 164</strong></p> 
-                <p><strong>Primer pago:</strong> ${formatDate(fechaPrimerPago)}</p>
                 <p>Ahorre pagando quincenalmente el plazo que prefiera:</p>
                 ${tablaOpciones}
                 <p>El incumplimiento de cualquiera de estos pagos causará un interés moratorio.</p>
